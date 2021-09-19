@@ -1,7 +1,8 @@
-# 1.2.0
+# 1.0.1
 
-- GoTestGenTest problem matcher added
+- Fixed Bazel version check
 
 # 1.0.0
 
-- GoCompilePkg
+- First release
+- Added `bazel-cpp-tools.bazelExecutable` configuration
