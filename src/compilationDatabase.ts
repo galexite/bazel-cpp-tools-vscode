@@ -9,7 +9,7 @@ export class CompilationDatabase implements vscode.Disposable {
   constructor() {
     this.disposables.push(
       vscode.commands.registerCommand(
-        "bsv.cc.compdb.generate",
+        "bazel-cpp-tools.compdb.generate",
         this.generate,
         this
       )
@@ -17,7 +17,7 @@ export class CompilationDatabase implements vscode.Disposable {
   }
 
   async generate(): Promise<vscode.TaskExecution | void> {
-    const compdbConfig = vscode.workspace.getConfiguration("bsv.cc.compdb");
+    const compdbConfig = vscode.workspace.getConfiguration("bazel-cpp-tools.compdb");
     const targets = compdbConfig.get<string[] | undefined>(
       "targets",
       undefined
@@ -25,13 +25,13 @@ export class CompilationDatabase implements vscode.Disposable {
     if (!targets || targets.length === 0) {
       vscode.window.showErrorMessage(
         "The list of bazel targets to index for the compilation database is not configured.  " +
-          'Please configure the "bsv.cc.compdb.targets" workspace setting to include a list of cc_library, cc_binary labels'
+          'Please configure the "bazel-cpp-tools.compdb.targets" workspace setting to include a list of cc_library, cc_binary labels'
       );
       return;
     }
 
-    const bazelConfig = vscode.workspace.getConfiguration("bsv.bazel");
-    let bazelExecutable = bazelConfig.get<string | undefined>("executable");
+    const bazelConfig = vscode.workspace.getConfiguration("bazel-cpp-tools");
+    let bazelExecutable = bazelConfig.get<string | undefined>("bazel-executable");
     if (!bazelExecutable) {
       bazelExecutable = "bazel";
     }

@@ -1,44 +1,52 @@
-# bazel-stack-vscode-cc 
+# bazel-cpp-tools
 
-Additional support for [rules_cc](https://github.com/bazelbuild/rules_cc) in
-conjunction with [bazel-stack-vscode](https://marketplace.visualstudio.com/items?itemName=StackBuild.bazel-stack-vscode)
+Generate `compile_commands.json` databases for C/C++ projects built using
+[Bazel](https://bazel.build/) to support IDE-like features, such as
+IntelliSense, debugging, and code browsing, within Visual Studio Code when using
+either the
+[official Visual Studio Code C/C++ extension](https://github.com/Microsoft/vscode-cpptools)
+or [clangd extension](https://github.com/clangd/vscode-clangd).
+
+This project is a fork of
+[bazel-stack-vscode-cc](https://github.com/stackb/bazel-stack-vscode-cc),
+removing a dependency on
+[bazel-stack-vscode](https://github.com/stackb/bazel-stack-vscode)
+whilst adding several features to make it easier to use.
 
 ## Features
 
-### Clang Compilation Database
+### Bazel C/C++ Tools: Generate compile_commands.json
 
-This extension provides a command `Bazel/C++: Generate Compilation Database`
-(`bsv.cc.compdb.generate`) that produces a file
-`${workspaceDirectory}/compile_commmands.json` that assists with Intellisense
-for Bazel/C++ repositories.
+This command (`bazel-cpp-tools.compdb.generate`) generates a `clangd` compile
+commands database, called `compile_commmands.json` that allows a C/C++ code 
+completion extension to provide IntelliSense for your Bazel C/C++ projects.
 
-To setup, edit your workspace settings (search for `bsv.cc.compdb.targets`) and
-configure a list of bazel labels for the `cc_binary` or `cc_library` targets
-you'd like to be indexed.  The tool will then produce a command set for the
+To setup, edit your workspace settings (search for
+`bazel-cpp-tools.compdb.targets` in `Preferences: Open Settings (UI)`) and
+configure a list of Bazel labels for the `cc_binary` or `cc_library` targets
+you'd like to be indexed. The tool will then produce a command set for the
 transitive closure of those top-level targets.
 
-To configure the bazel executable and/or additional bazel build arguments, use
-the `bsv.bazel.executable` and `bsv.bazel.buildFlags` settings (provided by
-[bazel-stack-vscode](https://marketplace.visualstudio.com/items?itemName=StackBuild.bazel-stack-vscode)).
-
-These can be added to your `.vscode/settings.json` and checked-in to VCS as
-follows:
+These can be added to your workspace's `.vscode/settings.json` and (optionally)
+checked-in to VCS as follows:
 
 ```json
 {
-    ...
-    "bsv.bazel.buildFlags": [
-        "--config=custom",
-    ],
-    "bsv.cc.compdb.targets": [
-        "//app/foo:foo_binary",
-        "//app/bar:bar_binary",
-        "//app/baz:baz_binary",
-    ]
+  "bazel-cpp-tools.compdb.targets": [
+    "//app/foo:foo_binary",
+    "//app/bar:bar_binary",
+    "//app/baz:baz_binary",
+  ]
 }
 ```
 
-Works best in conjuction with
-<https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd>.
+You can get a list of public labels from your project by running `bazel query`
+in a terminal window:
+
+```bash
+bazel query 'attr(visibility, "//visibility:public", //app/foo:*)'
+```
+
+Replacing `//app/foo` as appropriate.
 
 This feature was derived from <https://github.com/grailbio/bazel-compilation-database>.

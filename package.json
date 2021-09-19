@@ -1,45 +1,52 @@
 {
-  "publisher": "StackBuild",
-  "name": "bazel-stack-vscode-cc",
-  "displayName": "bazel-stack-vscode-cc",
-  "description": "C/C++ Support For Bazel Stack VSCode Extension",
-  "version": "1.1.2",
-  "icon": "stackb-cc.png",
+  "publisher": "George White",
+  "name": "bazel-cpp-tools",
+  "displayName": "Bazel C/C++ Tools",
+  "description": "Generate compile_commands.json for C/C++ projects using Bazel build",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.45.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stackb/bazel-stack-vscode-cc.git"
+    "url": "git+https://github.com/galexite/bazel-cpp-tools.git"
   },
   "keywords": [
-    "bazel",
-    "c++"
+    "autocomplete",
+    "Bazel",
+    "C",
+    "C++",
+    "IntelliSense",
+    "references",
+    "support",
+    "symbol"
   ],
-  "author": "stack.build authors",
+  "author": "George White, stack.build authors",
   "bugs": {
-    "url": "https://github.com/stackb/bazel-stack-vscode-cc/issues"
+    "url": "https://github.com/galexite/bazel-cpp-tools/issues"
   },
-  "homepage": "https://github.com/stackb/bazel-stack-vscode-cc#readme",
+  "homepage": "https://github.com/galexite/bazel-cpp-tools#readme",
   "categories": [
     "Programming Languages",
     "Other"
   ],
   "activationEvents": [
-    "onCommand:bsv.cc.compdb.generate"
-  ],
-  "extensionDependencies": [
-    "stackbuild.bazel-stack-vscode"
+    "onCommand:bazel-cpp-tools.compdb.generate"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "Bazel/C++",
+      "title": "Bazel C/C++ Tools",
       "properties": {
-        "bsv.cc.compdb.targets": {
+        "bazel-cpp-tools.bazel-executable": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the `bazel` executable, at least version 4.0.0 or greater. If empty, then `bazel` from system PATH is used."
+        },
+        "bazel-cpp-tools.compdb.targets": {
           "type": "array",
-          "description": "List of targets to index when creating the compile_commands.json file.",
+          "description": "List of Bazel build targets to index when generating compile_commands.json",
           "items": {
             "type": "string"
           },
@@ -49,9 +56,9 @@
     },
     "commands": [
       {
-        "category": "Bzl",
-        "command": "bsv.cc.compdb.generate",
-        "title": "Bazel/C++: Generate Compilation Database",
+        "category": "Bazel C/C++ Tools",
+        "command": "bazel-cpp-tools.compdb.generate",
+        "title": "Bazel C/C++ Tools: Generate compile_commands.json",
         "icon": "$(gear)"
       }
     ],
@@ -74,13 +81,15 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "build": "npm run compile && vsce package --out bazel-cpp-tools.vsix",
+    "clean": "rimraf ./out",
     "compile": "tsc -p ./",
+    "install": "npm run build && code --install-extension bazel-cpp-tools.vsix",
     "lint": "eslint src --ext ts",
-    "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "test": "node ./out/test/runTest.js",
-    "vscode-install": "vsce package --out ext.vsix && code --install-extension ext.vsix"
+    "vscode:prepublish": "npm run compile",
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
     "@types/glob": "^7.1.4",
@@ -95,12 +104,13 @@
     "eslint-plugin-import": "^2.24.2",
     "glob": "^7.1.7",
     "mocha": "^9.1.1",
+    "prettier": "2.4.1",
+    "rimraf": "^3.0.2",
     "typescript": "^4.4.3",
     "vscode-common": "1.50.0",
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
-    "bazel-stack-vscode-api": "^1.2.2",
     "tmp": "^0.2.1"
   }
 }
