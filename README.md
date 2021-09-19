@@ -17,12 +17,12 @@ whilst adding several features to make it easier to use.
 
 ### Bazel C/C++ Tools: Generate compile_commands.json
 
-This command (`bazel-cpp-tools.compdb.generate`) generates a `clangd` compile
+This command (`bazel-cpp-tools.compileCommands.generate`) generates a `clangd` compile
 commands database, called `compile_commands.json` that allows a C/C++ code 
 completion extension to provide IntelliSense for your Bazel C/C++ projects.
 
 To setup, edit your workspace settings (search for
-`bazel-cpp-tools.compdb.targets` in `Preferences: Open Settings (UI)`) and
+`bazel-cpp-tools.compileCommands.targets` in `Preferences: Open Settings (UI)`) and
 configure a list of Bazel labels for the `cc_binary` or `cc_library` targets
 you'd like to be indexed. The tool will then produce a command set for the
 transitive closure of those top-level targets.
@@ -32,7 +32,7 @@ checked-in to VCS as follows:
 
 ```json
 {
-  "bazel-cpp-tools.compdb.targets": [
+  "bazel-cpp-tools.compileCommands.targets": [
     "//app/foo:foo_binary",
     "//app/bar:bar_binary",
     "//app/baz:baz_binary",

@@ -31,7 +31,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:bazel-cpp-tools.compdb.generate"
+    "onCommand:bazel-cpp-tools.compileCommands.generate"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -39,14 +39,15 @@
       "type": "object",
       "title": "Bazel C/C++ Tools",
       "properties": {
-        "bazel-cpp-tools.bazel-executable": {
+        "bazel-cpp-tools.bazelExecutable": {
           "type": "string",
           "default": "",
-          "description": "Path to the `bazel` executable, at least version 4.0.0 or greater. If empty, then `bazel` from system PATH is used."
+          "description": "Path to the `bazel` executable, at least version 4.0.0 or greater. If empty, then `bazel` from system PATH is used.",
+          "scope": "machine"
         },
-        "bazel-cpp-tools.compdb.targets": {
+        "bazel-cpp-tools.compileCommands.targets": {
           "type": "array",
-          "description": "List of Bazel build targets to index when generating compile_commands.json",
+          "description": "List of Bazel build targets to index when generating compile_commands.json.",
           "items": {
             "type": "string"
           },
@@ -57,7 +58,7 @@
     "commands": [
       {
         "category": "Bazel C/C++ Tools",
-        "command": "bazel-cpp-tools.compdb.generate",
+        "command": "bazel-cpp-tools.compileCommands.generate",
         "title": "Bazel C/C++ Tools: Generate compile_commands.json",
         "icon": "$(gear)"
       }
@@ -84,7 +85,7 @@
     "build": "npm run compile && vsce package --out bazel-cpp-tools.vsix",
     "clean": "rimraf ./out",
     "compile": "tsc -p ./",
-    "install-vsix": "npm run build && code --install-extension bazel-cpp-tools.vsix",
+    "install-vsix": "code --install-extension bazel-cpp-tools.vsix",
     "lint": "eslint src --ext ts",
     "pretest": "npm run compile && npm run lint",
     "test": "node ./out/test/runTest.js",
