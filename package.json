@@ -1,5 +1,5 @@
 {
-  "publisher": "George White",
+  "publisher": "galexite",
   "name": "bazel-cpp-tools",
   "displayName": "Bazel C/C++ Tools",
   "description": "Generate compile_commands.json for C/C++ projects using Bazel build",
