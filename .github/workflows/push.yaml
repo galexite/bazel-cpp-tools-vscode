@@ -16,9 +16,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
+      - name: Install vsce
+        run: npm install -g vsce
       - name: Install dependencies
-        run: npm install
+        run: npm install --unsafe-perm
       - name: Run headless test
         uses: GabrielBB/xvfb-action@v1.0
         env:
