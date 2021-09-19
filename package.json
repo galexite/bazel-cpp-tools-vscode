@@ -5,7 +5,7 @@
   "description": "Generate compile_commands.json for C/C++ projects using Bazel build",
   "version": "1.0.0",
   "engines": {
-    "vscode": "^1.45.0"
+    "vscode": "^1.60.0"
   },
   "repository": {
     "type": "git",
