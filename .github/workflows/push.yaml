@@ -19,9 +19,9 @@ jobs:
           node-version: 14
       - name: Install dependencies
         run: npm install --unsafe-perm
-      - name: Run test
+      - name: Run test (under Xvfb, Linux only)
         run: xvfb-run -a npm test
         if: runner.os == 'Linux'
-      - name: Run headless test
+      - name: Run test
         run: npm test
         if: runner.os != 'Linux'
