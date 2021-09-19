@@ -16,8 +16,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: Install vsce
-        run: npm install -g vsce
       - name: Install dependencies
         run: npm install --unsafe-perm
       - name: Run headless test
@@ -36,8 +34,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: Install vsce
-        run: npm install -g vsce
       - name: Install dependencies
         run: npm install --unsafe-perm
       - name: Release

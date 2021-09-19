@@ -17,14 +17,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      - name: Install vsce
-        run: npm install -g vsce
       - name: Install dependencies
         run: npm install --unsafe-perm
+      - name: Run test
+        run: xvfb-run -a npm test
+        if: runner.os == 'Linux'
       - name: Run headless test
-        uses: GabrielBB/xvfb-action@v1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LICENSE_TOKEN: ${{ secrets.LICENSE_TOKEN }}
-        with:
-          run: npm test
+        run: npm test
+        if: runner.os != 'Linux'

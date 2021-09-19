@@ -50,3 +50,16 @@ bazel query 'attr(visibility, "//visibility:public", //app/foo:*)'
 Replacing `//app/foo` as appropriate.
 
 This feature was derived from <https://github.com/grailbio/bazel-compilation-database>.
+
+## Building and Installing
+
+This is a standard Visual Studio Code extension and so you will need Node.js
+installed along with a new enough version of `npm`, probably `8.x`.
+
+```bash
+npm install
+npm run install-vsix
+```
+
+The `install-vsix` script will build and install the extension in to the
+current Visual Studio Code editor.
