@@ -18,7 +18,7 @@ whilst adding several features to make it easier to use.
 ### Bazel C/C++ Tools: Generate compile_commands.json
 
 This command (`bazel-cpp-tools.compdb.generate`) generates a `clangd` compile
-commands database, called `compile_commmands.json` that allows a C/C++ code 
+commands database, called `compile_commands.json` that allows a C/C++ code 
 completion extension to provide IntelliSense for your Bazel C/C++ projects.
 
 To setup, edit your workspace settings (search for
