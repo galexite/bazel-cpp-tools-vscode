@@ -3,7 +3,7 @@
   "name": "bazel-cpp-tools",
   "displayName": "Bazel C/C++ Tools",
   "description": "Generate compile_commands.json for C/C++ projects using Bazel build",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -59,7 +59,7 @@
       {
         "category": "Bazel C/C++ Tools",
         "command": "bazel-cpp-tools.compileCommands.generate",
-        "title": "Bazel C/C++ Tools: Generate compile_commands.json",
+        "title": "Generate compile_commands.json",
         "icon": "$(gear)"
       }
     ],

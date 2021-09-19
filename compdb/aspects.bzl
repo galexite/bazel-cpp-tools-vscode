@@ -30,9 +30,6 @@ load(
     "OBJCPP_COMPILE_ACTION_NAME",
     "OBJC_COMPILE_ACTION_NAME",
 )
-load("@bazel_skylib//lib:versions.bzl", "versions")
-
-versions.check(minimum_bazel_version = "4.0.0")
 
 CompilationAspect = provider()
 
