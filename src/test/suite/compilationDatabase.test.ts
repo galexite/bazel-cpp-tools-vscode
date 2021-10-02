@@ -37,6 +37,7 @@ suite("Compilation Database", () => {
         process.platform === "win32"
           ? "\\path\\to\\this\\extension\\compdb\\postprocess.py"
           : "/path/to/this/extension/compdb/postprocess.py",
+        "-s",
         "-b",
         "/tmp/build-events.json",
         "&&",

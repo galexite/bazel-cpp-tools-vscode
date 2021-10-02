@@ -1,3 +1,11 @@
+# 1.0.3
+
+- Re-write paths starting with `external` under the local_exec_dir.
+
+# 1.0.2
+
+- Re-work pre-process script, fix pylint errors
+
 # 1.0.1
 
 - Fixed Bazel version check
