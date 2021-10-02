@@ -107,6 +107,7 @@ export function createBazelBuildAspectCommand(
     ...targets,
     "&&",
     path.join(repositoryPath, "postprocess.py"),
+    "-s",
     "-b",
     tmpFile,
     "&&",
