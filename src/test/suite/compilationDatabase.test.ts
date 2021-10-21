@@ -12,12 +12,14 @@ suite("Compilation Database", () => {
     const tmpFile = "/tmp/build-events.json";
     const buildArgs: string[] = ["--config=foo"];
     const targets: string[] = ["//app/a", "//app/b"];
+    const timeStamp: number = 1234;
 
     const cmd = createBazelBuildAspectCommand(
       repoPath,
       tmpFile,
       buildArgs,
-      targets
+      targets,
+      timeStamp
     );
 
     assert.deepStrictEqual(
@@ -30,6 +32,7 @@ suite("Compilation Database", () => {
         "--noshow_loading_progress",
         "--output_groups=compdb_files,header_files",
         "--build_event_json_file=/tmp/build-events.json",
+        "--action_env=BAZEL_CPP_TOOLS_TIMESTAMP=1234",
         "--config=foo",
         "//app/a",
         "//app/b",

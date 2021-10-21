@@ -1,3 +1,10 @@
+# 1.0.4
+
+- Add a timestamp to `--action_env` to make Bazel re-compile the entire
+  codebase each time `compile_commands.json` is generated (thanks @caandewiel
+  for the idea). This ensures we capture the whole build each time we generate
+  the database.
+
 # 1.0.3
 
 - Re-write paths starting with `external` under the local_exec_dir.

@@ -55,11 +55,13 @@ export class CompilationDatabase implements vscode.Disposable {
     const repositoryPath = Container.file("compdb/");
     const cwd = Container.workspaceFolderFsPath || ".";
     const buildEventsJsonTempFile = tmp.fileSync().name; // cleaned up on process exit
+    const timeStamp = +new Date() / 1000;
     const args = createBazelBuildAspectCommand(
       repositoryPath.fsPath,
       buildEventsJsonTempFile,
       buildArgs,
-      targets
+      targets,
+      timeStamp
     );
     const env = {};
 
@@ -92,7 +94,8 @@ export function createBazelBuildAspectCommand(
   repositoryPath: string,
   tmpFile: string,
   buildArgs: string[],
-  targets: string[]
+  targets: string[],
+  timeStamp: number
 ): string[] {
   return [
     "build",
@@ -103,6 +106,7 @@ export function createBazelBuildAspectCommand(
     "--noshow_loading_progress",
     "--output_groups=compdb_files,header_files",
     "--build_event_json_file=" + tmpFile,
+    `--action_env=BAZEL_CPP_TOOLS_TIMESTAMP=${timeStamp}`,
     ...buildArgs,
     ...targets,
     "&&",
