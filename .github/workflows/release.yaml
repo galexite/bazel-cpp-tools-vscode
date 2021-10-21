@@ -37,13 +37,13 @@ jobs:
           node-version: 14
       - name: Install dependencies
         run: npm install --unsafe-perm
-      - name: Upload binary to GitHub Releases
-        uses: softprops/action-gh-release@v1
-        with:
-          files: bazel-cpp-tools.vsix
       - name: Release on Visual Studio Marketplace
         uses: JCofman/vscodeaction@master
         env:
           PUBLISHER_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
         with:
           args: publish -p $PUBLISHER_TOKEN
+      - name: Upload binary to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: bazel-cpp-tools.vsix
