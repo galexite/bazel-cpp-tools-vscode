@@ -34,22 +34,15 @@ class PostProcess:
 
     def fix_db_entry(self, entry, workspace_dir, local_exec_root):
         if "directory" in entry and entry["directory"] == "__EXEC_ROOT__":
-            entry["directory"] = (
-                workspace_dir if self.rel_to_source_dir else local_exec_root
-            )
+            entry["directory"] = local_exec_root
         # TODO: research better if this is advantageous
         # if 'file' in entry and entry['file'].startswith(bazel_bin):
         #     entry['file'] = entry['file'][len(bazel_bin)+1:]
         if "command" in entry:
             command = entry["command"]
             if command:
-                command = command.replace("-isysroot __BAZEL_XCODE_SDKROOT__", "")
-                if self.rel_to_source_dir:
-                    command = re.sub(
-                        r"\s+external",
-                        " " + os.path.join(local_exec_root, "external"),
-                        command,
-                    )
+                command = command.replace(r"\s+-isysroot __BAZEL_XCODE_SDKROOT__", "")
+                command = command.replace(r"\s+-fno-canonical-system-headers", "")
                 entry["command"] = command
         return entry
 
@@ -61,24 +54,28 @@ class PostProcess:
             build_events_json_file = tempfile.mkstemp(".json", "build_events")
 
         print("Gathering output files...")
-        bazel_stderr = []
-        with open(build_events_json_file, "r") as f:
+        compile_command_json_db_files = []
+        with open(build_events_json_file, "r", encoding="utf-8") as f:
             for line in f:
                 event = json.loads(line)
                 if "started" in event:
                     workspace_dir = event["started"]["workspaceDirectory"]
                     print("Workspace Directory:", workspace_dir)
-                elif "progress" in event:
-                    if "stderr" in event["progress"]:
-                        bazel_stderr.extend(event["progress"]["stderr"].splitlines())
                 elif "workspaceInfo" in event:
                     local_exec_root = event["workspaceInfo"]["localExecRoot"]
                     print("Execution Root:", local_exec_root)
+                elif "namedSetOfFiles" in event:
+                    if "files" in event["namedSetOfFiles"]:
+                        for named_file in event["namedSetOfFiles"]["files"]:
+                            if "uri" in named_file:
+                                uri = named_file["uri"]
+                                if uri.endswith(".compile_commands.json"):
+                                    assert uri.startswith("file://"), f"Invalid URI: {uri}"
+                                    path = uri[7:]
+                                    assert os.path.exists(path), f"{path} does not exist"
+                                    compile_command_json_db_files.append(path)
 
-        compile_command_json_db_files = []
-        for line in bazel_stderr:
-            if line.endswith(".compile_commands.json"):
-                compile_command_json_db_files.append(line.strip())
+        assert compile_command_json_db_files, "No .compile_commands.json files to merge"
 
         ##
         ## Collect/Fix/Merge Compilation Databases
@@ -86,14 +83,23 @@ class PostProcess:
         print("Preparing compilation database...")
 
         db_entries = []
+        compile_command_json_db_files_count = 0
         for db in compile_command_json_db_files:
             with open(db, "r") as f:
                 db_entries.extend(json.load(f))
+                compile_command_json_db_files_count += 1
+
+        print(f"Read {compile_command_json_db_files_count} files.")
+
+        db_entries_count = len(db_entries)
+        assert db_entries_count > 0, "No database entries were loaded."
+        print(f"Loaded {db_entries_count} entries.")
 
         db_entries = [
             self.fix_db_entry(entry, workspace_dir, local_exec_root)
             for entry in db_entries
         ]
+
         compdb_file = os.path.join(workspace_dir, "compile_commands.json")
 
         with open(compdb_file, "w") as outdb:
