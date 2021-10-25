@@ -24,8 +24,6 @@ https://github.com/grailbio/bazel-compilation-database/blob/08d706d3cf7daf3d529a
 import argparse
 import json
 import os
-import tempfile
-import re
 
 
 class PostProcess:
@@ -33,8 +31,8 @@ class PostProcess:
         self.rel_to_source_dir = rel_to_source_dir
 
     def fix_db_entry(self, entry, workspace_dir, local_exec_root):
-        if "directory" in entry and entry["directory"] == "__EXEC_ROOT__":
-            entry["directory"] = local_exec_root
+        workspace_name = os.path.basename(workspace_dir)
+        entry["directory"] = os.path.join(workspace_dir, "bazel-" + workspace_name)
         # TODO: research better if this is advantageous
         # if 'file' in entry and entry['file'].startswith(bazel_bin):
         #     entry['file'] = entry['file'][len(bazel_bin)+1:]
@@ -46,14 +44,12 @@ class PostProcess:
                 entry["command"] = command
         return entry
 
-    def post_process(self, build_events_json_file=None):
+    def post_process(self, build_events_json_file):
         workspace_dir = ""
         local_exec_root = ""
 
-        if build_events_json_file is None:
-            build_events_json_file = tempfile.mkstemp(".json", "build_events")
+        print(f"Gathering output files from {build_events_json_file}...")
 
-        print("Gathering output files...")
         compile_command_json_db_files = []
         with open(build_events_json_file, "r", encoding="utf-8") as f:
             for line in f:
@@ -83,13 +79,9 @@ class PostProcess:
         print("Preparing compilation database...")
 
         db_entries = []
-        compile_command_json_db_files_count = 0
         for db in compile_command_json_db_files:
             with open(db, "r") as f:
                 db_entries.extend(json.load(f))
-                compile_command_json_db_files_count += 1
-
-        print(f"Read {compile_command_json_db_files_count} files.")
 
         db_entries_count = len(db_entries)
         assert db_entries_count > 0, "No database entries were loaded."
@@ -107,8 +99,8 @@ class PostProcess:
 
         print("DONE", compdb_file)
 
-    @classmethod
-    def run(cls):
+    @staticmethod
+    def run():
         parser = argparse.ArgumentParser()
         parser.add_argument(
             "-s",
@@ -117,10 +109,13 @@ class PostProcess:
             action="store_true",
             help="use the original source directory instead of bazel execroot",
         )
-        parser.add_argument(
+
+        required_named = parser.add_argument_group("required named arguments")
+        required_named.add_argument(
             "-b",
             "--build-events-json-file",
             help="build events json file from the compilation aspect",
+            required=True,
         )
         args = parser.parse_args()
 
