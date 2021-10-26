@@ -24,6 +24,7 @@ https://github.com/grailbio/bazel-compilation-database/blob/08d706d3cf7daf3d529a
 import argparse
 import json
 import os
+import re
 
 
 class PostProcess:
@@ -39,8 +40,8 @@ class PostProcess:
         if "command" in entry:
             command = entry["command"]
             if command:
-                command = command.replace(r"\s+-isysroot __BAZEL_XCODE_SDKROOT__", "")
-                command = command.replace(r"\s+-fno-canonical-system-headers", "")
+                command = re.sub(r"\s+-isysroot __BAZEL_XCODE_SDKROOT__", "", command)
+                command = re.sub(r"\s+-fno-canonical-system-headers", "", command)
                 entry["command"] = command
         return entry
 
