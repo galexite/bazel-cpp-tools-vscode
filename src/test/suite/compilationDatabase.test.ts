@@ -28,6 +28,7 @@ suite("Compilation Database", () => {
         "--override_repository=bazel_vscode_compdb=/path/to/this/extension/compdb",
         "--aspects=@bazel_vscode_compdb//:aspects.bzl%compilation_database_aspect",
         "--color=no",
+        "--show_result=2147483647", // MAX_INT
         "--noshow_progress",
         "--noshow_loading_progress",
         "--output_groups=compdb_files,header_files",
