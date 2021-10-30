@@ -4,7 +4,6 @@ import * as fs from "fs";
 import * as tmp from "tmp";
 import path = require("path");
 import { ExecException, execFile } from "child_process";
-import { assertType } from "vscode-common/out/types";
 
 suite("Compilation Database", () => {
   test("createBazelBuildAspectCommand", () => {
