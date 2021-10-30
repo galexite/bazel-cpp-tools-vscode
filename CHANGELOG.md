@@ -1,3 +1,8 @@
+# 1.0.5
+
+- Added support for multiple build targets.
+- Hack: Use the workspace directory name for identifying the local exec root.
+
 # 1.0.4
 
 - Add a timestamp to `--action_env` to make Bazel re-compile the entire
