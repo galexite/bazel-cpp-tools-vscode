@@ -5,8 +5,8 @@ import * as tmp from "tmp";
 import path = require("path");
 import { ExecException, execFile } from "child_process";
 
-suite("Compilation Database", () => {
-  test("createBazelBuildAspectCommand", () => {
+suite("Compilation Database", function () {
+  test("createBazelBuildAspectCommand", function () {
     const repoPath = "/path/to/this/extension/compdb";
     const tmpFile = "/tmp/build-events.json";
     const buildArgs: string[] = ["--config=foo"];
@@ -51,8 +51,7 @@ suite("Compilation Database", () => {
     );
   });
 
-  // test not working in CI yet.
-  test.skip("postprocess.py exists", (done) => {
+  test("postprocess.py exists", function (done) {
     const extensionDevelopmentPath = path.resolve(__dirname, "../../..");
     const postprocessPy = path.join(
       extensionDevelopmentPath,

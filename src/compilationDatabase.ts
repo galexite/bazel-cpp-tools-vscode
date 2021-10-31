@@ -17,7 +17,9 @@ export class CompilationDatabase implements vscode.Disposable {
   }
 
   async generate(): Promise<vscode.TaskExecution | void> {
-    const compdbConfig = vscode.workspace.getConfiguration("bazel-cpp-tools.compileCommands");
+    const compdbConfig = vscode.workspace.getConfiguration(
+      "bazel-cpp-tools.compileCommands"
+    );
     const targets = compdbConfig.get<string[] | undefined>(
       "targets",
       undefined
@@ -31,7 +33,9 @@ export class CompilationDatabase implements vscode.Disposable {
     }
 
     const bazelConfig = vscode.workspace.getConfiguration("bazel-cpp-tools");
-    let bazelExecutable = bazelConfig.get<string | undefined>("bazelExecutable");
+    let bazelExecutable = bazelConfig.get<string | undefined>(
+      "bazelExecutable"
+    );
     if (!bazelExecutable) {
       bazelExecutable = "bazel";
     }
